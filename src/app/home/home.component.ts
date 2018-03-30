@@ -8,10 +8,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class HomeComponent implements OnInit {
   // Variables
-
-  @ViewChild('firstTab')
-  public firstTab;
-
   public form: FormGroup;
 
   public selectedIndex = 0;
@@ -35,8 +31,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  /**
+   * when user selects a txt file
+   * @param  {event} Event holds value of event that holds HTMLInputElement
+   */
   load($event) {
     const input = $event.target as HTMLInputElement;
+    // Validate the input is in .txt format
     if (/(\.txt|\.TXT)$/.test(input.value)) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -46,17 +47,23 @@ export class HomeComponent implements OnInit {
       this.invalidType = false;
       this.selectedIndex = 0;
     } else {
-      console.log('invalid');
       this.invalidType = true;
       this.form.controls.textToTranslate.reset('');
     }
   }
+
+  /**
+   * Event Fires when user navigate between tabs
+   * @param {number} val  holds selected tab index
+   */
   selectedIndexChange(val: number) {
     this.selectedIndex = val;
   }
 
+  /**
+   * submitting form and navigating to next stage
+   */
   submit() {
-    console.log(this.form.value);
     if (this.form.valid) {
 
     }
