@@ -8,9 +8,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class HomeComponent implements OnInit {
   // Variables
-  /** holds the input file to be imported */
-  @ViewChild('file')
-  file: HTMLInputElement;
 
   @ViewChild('firstTab')
   public firstTab;
@@ -21,7 +18,6 @@ export class HomeComponent implements OnInit {
 
   public invalidType = false;
 
-  public title = 'Translation Portal';
 
   public foods = [
     { value: 'english-0', viewValue: 'English' },
