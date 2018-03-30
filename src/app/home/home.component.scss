@@ -15,6 +15,9 @@
             position: absolute;
             z-index: -1;
         }
+        mat-error{
+            margin-top: 10px;
+        }
     }
     mat-tab-group {
         min-height: 200px;

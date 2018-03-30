@@ -12,7 +12,14 @@ export class HomeComponent implements OnInit {
   @ViewChild('file')
   file: HTMLInputElement;
 
+  @ViewChild('firstTab')
+  public firstTab;
+
   public form: FormGroup;
+
+  public selectedIndex = 0;
+
+  public invalidType = false;
 
   public title = 'Translation Portal';
 
@@ -33,13 +40,25 @@ export class HomeComponent implements OnInit {
   }
 
   load($event) {
-    const input = $event.target;
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.form.controls.textToTranslate.setValue(reader.result);
-    };
-    reader.readAsText(input.files[0]);
+    const input = $event.target as HTMLInputElement;
+    if (/(\.txt|\.TXT)$/.test(input.value)) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.form.controls.textToTranslate.setValue(reader.result);
+      };
+      reader.readAsText(input.files[0]);
+      this.invalidType = false;
+      this.selectedIndex = 0;
+    } else {
+      console.log('invalid');
+      this.invalidType = true;
+      this.form.controls.textToTranslate.reset('');
+    }
   }
+  selectedIndexChange(val: number) {
+    this.selectedIndex = val;
+  }
+
   submit() {
     console.log(this.form.value);
     if (this.form.valid) {
