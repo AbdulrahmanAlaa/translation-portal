@@ -1,0 +1,10 @@
+.text_editor {
+    &__main {
+        min-height: 270px;
+    }
+    &__right{
+        mat-card{
+            min-height: 50px;
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import { LanguageTranslateService } from './language-translate.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -11,6 +11,7 @@ import { MaterialModule } from './material.module';
 import { HomeComponent } from './home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextEditComponent } from './text-edit/text-edit.component';
+import { StorageService } from './storage.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,14 +19,15 @@ import { TextEditComponent } from './text-edit/text-edit.component';
     TextEditComponent
   ],
   imports: [
-  FormsModule,
+    FlexLayoutModule,
+    FormsModule,
     ReactiveFormsModule,
     MaterialModule,
     BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [LanguageTranslateService],
+  providers: [LanguageTranslateService, StorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

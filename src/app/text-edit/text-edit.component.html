@@ -1,3 +1,53 @@
-<p>
-  text-edit works!
-</p>
+<div  class="text_editor"
+      fxLayout
+      fxLayout.xs="column"
+      fxLayoutAlign="center"
+      fxLayoutGap="10px"
+      fxLayoutGap.xs="0"
+>
+<!-- Middle Container -->
+  <div fxFlex="80%">
+    <mat-card class="text_editor__main"></mat-card>
+  </div>
+
+<!-- Right Container -->  
+  <div
+    class="text_editor__right"
+    fxLayout="column"
+    fxLayout.xs="column"
+    fxLayoutAlign="center"
+    fxLayoutGap="10px"
+    fxLayoutGap.xs="0"  
+    fxFlex="20%">
+    <mat-card>
+      <mat-card-content>
+        <h5>Current token</h5> 
+        <p>
+          Token: {{language}}
+        </p>
+        <p>
+            Gapped: {{language}}
+        </p>
+        <div>
+            <mat-slide-toggle  color="primary"> Toggle Gap</mat-slide-toggle>
+        </div>
+        <div>
+            <mat-slide-toggle color="primary">Make it special </mat-slide-toggle>
+        </div>
+        <br>
+        <h5>
+            Alternative solutions
+        </h5>
+
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+       
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content></mat-card-content>
+    </mat-card>
+  </div>
+</div>
