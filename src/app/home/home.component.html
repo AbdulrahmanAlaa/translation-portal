@@ -43,9 +43,9 @@
               formControlName="language" 
               placeholder="Language">
               <mat-option 
-                *ngFor="let food of foods"  
-                [value]="food.value">
-                  {{ food.viewValue }}
+                *ngFor="let language of languages"  
+                [value]="language.value">
+                  {{ language.viewValue }}
               </mat-option>
             </mat-select>
           </mat-form-field>

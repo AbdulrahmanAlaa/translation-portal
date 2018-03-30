@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   public invalidType = false;
 
 
-  public foods = [
+  public languages = [
     { value: 'english-0', viewValue: 'English' },
     { value: 'french-1', viewValue: 'French' },
     { value: 'german-2', viewValue: 'German' }
