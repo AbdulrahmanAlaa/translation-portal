@@ -19,6 +19,7 @@
     fxLayoutGap="10px"
     fxLayoutGap.xs="0"  
     fxFlex="20%">
+    <!-- Item Configurations Card -->
     <mat-card>
       <mat-card-content>
         <h5>Current token</h5> 
@@ -32,22 +33,95 @@
             <mat-slide-toggle  color="primary"> Toggle Gap</mat-slide-toggle>
         </div>
         <div>
-            <mat-slide-toggle color="primary">Make it special </mat-slide-toggle>
+            <mat-slide-toggle matTooltip="Cannot make it special when it is gapped" color="primary">Make it special </mat-slide-toggle>
         </div>
         <br>
-        <h5>
-            Alternative solutions
-        </h5>
+        <!-- Solutions Part -->
+       <div>
+          <h5>
+              Alternative solutions
+              <button mat-mini-fab color="primary">
+                  <mat-icon matTooltip="Add an alternative solution">add</mat-icon>
+              </button>
+          </h5>
+          <!-- for each solution in each word -->
+          <mat-form-field class="">
+              <input matInput >
+          </mat-form-field>
+          <mat-icon matTooltip="Delete this solution">close</mat-icon>
+       </div>
+       <!-- Gap Part -->
+       <div>
+         <div>
+           Change gap index
+         </div>
+         <mat-slider color="primary" min="1" max="5" step="1" ></mat-slider>
+       </div>
 
       </mat-card-content>
     </mat-card>
     <mat-card>
       <mat-card-content>
-       
+        <div
+          fxLayout="column"
+          fxLayout.xs="column"
+          fxLayoutAlign="center"
+          fxLayoutGap="10px"
+          fxLayoutGap.xs="0">
+          <div fxLayoutAlign="center">
+              New Word
+          </div>
+          <div fxLayoutAlign="center">
+            <button mat-fab color="warn">
+              <mat-icon matTooltip="Drop here to delete">delete</mat-icon>
+            </button>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
     <mat-card>
-      <mat-card-content></mat-card-content>
+      <mat-card-content>
+        <div
+          fxLayout="column"
+          fxLayout.xs="column"
+          fxLayoutAlign="center"
+          fxLayoutGap="5px"
+          fxLayoutGap.xs="0">
+            <div fxLayoutAlign="center">
+              <button (click)="openDialogCancel()" mat-raised-button>
+                Cancel
+              </button>
+            </div>
+            <div fxLayoutAlign="center">
+              <button  mat-raised-button>
+                Reformat
+              </button>
+            </div>
+            <div fxLayoutAlign="center">
+              <button  mat-raised-button>
+                Export
+              </button>
+            </div>
+            <div fxLayoutAlign="center">
+              <button  mat-raised-button>
+                Debug
+              </button>
+            </div>
+            <div fxLayoutAlign="center">
+              <mat-slide-toggle  color="primary"> Check Preview</mat-slide-toggle>
+            </div>
+        </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <p>
+          gaps: {{0}}
+        </p>
+        <p>
+          total words: {{0}}
+        </p>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>

@@ -12,11 +12,13 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextEditComponent } from './text-edit/text-edit.component';
 import { StorageService } from './storage.service';
+import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TextEditComponent
+    TextEditComponent,
+    ModalDialogComponent
   ],
   imports: [
     FlexLayoutModule,
@@ -28,6 +30,7 @@ import { StorageService } from './storage.service';
     AppRoutingModule
   ],
   providers: [LanguageTranslateService, StorageService],
+  entryComponents: [ModalDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

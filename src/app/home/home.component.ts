@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StorageService } from './../storage.service';
+import { LOCAL_STORAGE } from '../../shared/utilities/defines';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tp-home',
@@ -10,11 +13,13 @@ export class HomeComponent implements OnInit {
   // Variables
   public form: FormGroup;
 
+  /** holds current selected tab index*/
   public selectedIndex = 0;
 
+  /** holds value indicate if user uploaded wrong files or not */
   public invalidType = false;
 
-
+  /** holds available system languages */
   public languages = [
     { value: 'english-0', viewValue: 'English' },
     { value: 'french-1', viewValue: 'French' },
@@ -22,7 +27,7 @@ export class HomeComponent implements OnInit {
   ];
 
   // Life Cycle Hooks
-  constructor(private _fb: FormBuilder) { }
+  constructor(private _fb: FormBuilder, private storageService: StorageService,private router:Router) { }
 
   ngOnInit(): void {
     this.form = this._fb.group({
@@ -65,7 +70,9 @@ export class HomeComponent implements OnInit {
    */
   submit() {
     if (this.form.valid) {
-
+      this.storageService.setStorage(LOCAL_STORAGE.Language, this.form.controls.language.value);
+      this.storageService.setStorage(LOCAL_STORAGE.TEXT, this.form.controls.textToTranslate.value);
+      this.router.navigate(['/text-editor']);
     }
   }
 }
