@@ -1,4 +1,8 @@
 .text_editor {
+    &__word{
+        margin:10px;
+        border: 1px solid black;
+    }
     &__main {
         min-height: 270px;
     }

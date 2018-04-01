@@ -14,6 +14,8 @@ export class TextEditComponent implements OnInit {
   /** holds user selected language and text */
   currentData: { language, text } = { language: '', text: '' };
 
+  public words = [];
+
   // Life Cycle Hooks
   constructor(public dialog: MatDialog, private router: Router, private storageService: StorageService) { }
 
@@ -23,7 +25,15 @@ export class TextEditComponent implements OnInit {
     if (!this.currentData.language || !this.currentData.text) {
       this.router.navigate(['/']);
     }
+    this.processDate();
   }
+  /**
+   * Split each word and make it draggable
+   */
+  processDate(): any {
+    this.words = this.currentData.text.split(' ');
+  }
+
 
   /**
    * Cancel Changes and return back home

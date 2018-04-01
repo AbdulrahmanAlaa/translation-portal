@@ -7,7 +7,12 @@
 >
 <!-- Middle Container -->
   <div fxFlex="80%">
-    <mat-card class="text_editor__main"></mat-card>
+    <mat-card class="text_editor__main">
+      <!-- Draggable Words  -->
+      <span class="text_editor__word" *ngFor="let word of words">
+          {{word}}
+      </span>
+    </mat-card>
   </div>
 
 <!-- Right Container -->  
