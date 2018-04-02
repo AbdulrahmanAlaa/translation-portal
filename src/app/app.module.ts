@@ -13,11 +13,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextEditComponent } from './text-edit/text-edit.component';
 import { StorageService } from './storage.service';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
+import { ReplacePipe } from './shared/pipes/replace.pipe';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     TextEditComponent,
+    ReplacePipe,
     ModalDialogComponent
   ],
   imports: [
@@ -29,7 +31,8 @@ import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [LanguageTranslateService, StorageService],
+  providers: [
+    LanguageTranslateService, StorageService],
   entryComponents: [ModalDialogComponent],
   bootstrap: [AppComponent]
 })

@@ -4,6 +4,7 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 import { Router } from '@angular/router';
 import { StorageService } from './../storage.service';
 import { LOCAL_STORAGE } from '../../shared/utilities/defines';
+import { Word } from '../shared/models/word';
 
 @Component({
   selector: 'tp-text-edit',
@@ -14,7 +15,11 @@ export class TextEditComponent implements OnInit {
   /** holds user selected language and text */
   currentData: { language, text } = { language: '', text: '' };
 
+  /** holds all words */
   public words = [];
+
+  /** holds selected current word */
+  public currentWord: Word = null;
 
   // Life Cycle Hooks
   constructor(public dialog: MatDialog, private router: Router, private storageService: StorageService) { }
@@ -27,11 +32,27 @@ export class TextEditComponent implements OnInit {
     }
     this.processDate();
   }
+
+
   /**
    * Split each word and make it draggable
    */
   processDate(): any {
-    this.words = this.currentData.text.split(' ');
+    let singleWord: Word = null;
+
+    // Holds array of words
+    const words = this.currentData.text.split(' ');
+    // Holds array of objects needed to save each word functionality
+    this.words = words.map((word, index) => {
+      singleWord = new Object() as Word;
+      singleWord.id = index;
+      singleWord.value = word;
+      singleWord.alternatives = [];
+      singleWord.gapStatus = false;
+      singleWord.specialStatus = false;
+      singleWord.offset = 3;
+      return singleWord;
+    });
   }
 
 
@@ -53,5 +74,9 @@ export class TextEditComponent implements OnInit {
     });
   }
 
+  // Set Current Word to be Configurable
+  setCurrentWord(word: Word) {
+    this.currentWord = word;
+  }
 
 }

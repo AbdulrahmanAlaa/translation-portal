@@ -9,9 +9,13 @@
   <div fxFlex="80%">
     <mat-card class="text_editor__main">
       <!-- Draggable Words  -->
-      <span class="text_editor__word" *ngFor="let word of words">
-          {{word}}
-      </span>
+      <button 
+          mat-raised-button 
+          class="text_editor__word" 
+          (click)="setCurrentWord(word)" 
+          *ngFor="let word of words">
+        {{word.value}}
+      </button>
     </mat-card>
   </div>
 
@@ -25,17 +29,17 @@
     fxLayoutGap.xs="0"  
     fxFlex="20%">
     <!-- Item Configurations Card -->
-    <mat-card>
-      <mat-card-content>
+    <mat-card *ngIf="currentWord">
+      <mat-card-content >
         <h5>Current token</h5> 
         <p>
-          Token: {{language}}
+          Token: {{currentWord && currentWord.value}}
         </p>
         <p>
-            Gapped: {{language}}
+            Gapped: {{currentWord && currentWord.value | replace:currentWord.offset}}
         </p>
         <div>
-            <mat-slide-toggle  color="primary"> Toggle Gap</mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="currentWord.gapStatus" color="primary"> Toggle Gap</mat-slide-toggle>
         </div>
         <div>
             <mat-slide-toggle matTooltip="Cannot make it special when it is gapped" color="primary">Make it special </mat-slide-toggle>
@@ -97,21 +101,21 @@
                 Cancel
               </button>
             </div>
-            <div fxLayoutAlign="center">
+            <!-- <div fxLayoutAlign="center">
               <button  mat-raised-button>
                 Reformat
               </button>
-            </div>
+            </div> -->
             <div fxLayoutAlign="center">
               <button  mat-raised-button>
                 Export
               </button>
             </div>
-            <div fxLayoutAlign="center">
+            <!-- <div fxLayoutAlign="center">
               <button  mat-raised-button>
                 Debug
               </button>
-            </div>
+            </div> -->
             <div fxLayoutAlign="center">
               <mat-slide-toggle  color="primary"> Check Preview</mat-slide-toggle>
             </div>
@@ -124,7 +128,7 @@
           gaps: {{0}}
         </p>
         <p>
-          total words: {{0}}
+          total words: {{words.length}}
         </p>
       </mat-card-content>
     </mat-card>

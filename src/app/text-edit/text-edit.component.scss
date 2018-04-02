@@ -1,7 +1,10 @@
 .text_editor {
     &__word{
         margin:10px;
-        border: 1px solid black;
+        padding: 10px;
+        color:rgba(0,0,0,.87);
+
+        //border: 1px solid black;
     }
     &__main {
         min-height: 270px;
