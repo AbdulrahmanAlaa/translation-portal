@@ -1,8 +1,10 @@
 export interface Word {
     id: number;
+    showAlternatives: boolean;
     alternatives: Array<string>;
-    specialStatus: boolean;
+    boldStatus: boolean;
     gapStatus: boolean;
     offset: number;
     value: string;
+    isEditMode: boolean;
 }

@@ -14,6 +14,7 @@ import { TextEditComponent } from './text-edit/text-edit.component';
 import { StorageService } from './storage.service';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { ReplacePipe } from './shared/pipes/replace.pipe';
+import { NgxDnDModule } from '@swimlane/ngx-dnd';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +24,7 @@ import { ReplacePipe } from './shared/pipes/replace.pipe';
     ModalDialogComponent
   ],
   imports: [
+     NgxDnDModule,
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,

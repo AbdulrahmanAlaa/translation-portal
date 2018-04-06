@@ -1,17 +1,24 @@
 .text_editor {
-    &__word{
-        margin:10px;
+    &__make_bold {
+        font-weight: 600;
+    }
+    &__word {
+        margin: 10px;
         padding: 10px;
-        color:rgba(0,0,0,.87);
-
-        //border: 1px solid black;
+        color: rgba(0, 0, 0, .87); //border: 1px solid black;
     }
     &__main {
         min-height: 270px;
     }
-    &__right{
-        mat-card{
+    &__right {
+        &__close{
+            cursor: pointer;
+        }
+        mat-card {
             min-height: 50px;
+        }
+        &__empty_word {
+            font-size: 17px;
         }
     }
 }

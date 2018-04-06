@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { StorageService } from './../storage.service';
 import { LOCAL_STORAGE } from '../../shared/utilities/defines';
 import { Word } from '../shared/models/word';
+import { ReplacePipe } from '../shared/pipes/replace.pipe';
 
 @Component({
   selector: 'tp-text-edit',
@@ -18,8 +19,17 @@ export class TextEditComponent implements OnInit {
   /** holds all words */
   public words = [];
 
+  /** display text after formatting and before exporting */
+  public showPreview = false;
+
+  /** holds the text that will be exported as preview */
+  public processedText = null;
+
   /** holds selected current word */
   public currentWord: Word = null;
+
+  /** holds the new value in the edit mode */
+  public newValue;
 
   // Life Cycle Hooks
   constructor(public dialog: MatDialog, private router: Router, private storageService: StorageService) { }
@@ -49,8 +59,10 @@ export class TextEditComponent implements OnInit {
       singleWord.value = word;
       singleWord.alternatives = [];
       singleWord.gapStatus = false;
-      singleWord.specialStatus = false;
+      singleWord.showAlternatives = false;
+      singleWord.boldStatus = false;
       singleWord.offset = 3;
+      singleWord.isEditMode = false;
       return singleWord;
     });
   }
@@ -79,4 +91,50 @@ export class TextEditComponent implements OnInit {
     this.currentWord = word;
   }
 
+  /**
+   * Add Gap to word
+   * @param word {Word}
+   */
+  createGap(word: Word) {
+
+  }
+
+  /**
+   *  Edit The Word
+   * @param word
+   */
+  makeItBoldAndGapped(word: Word) {
+    word.boldStatus = word.gapStatus = true;
+  }
+
+  /** Process data before being exported  */
+  processPreview() {
+    console.log('called', this.words);
+    let words = '';
+    const replace = new ReplacePipe().transform;
+    this.words.forEach((word: Word) => {
+      if (word.boldStatus) {
+        words += ` ${this.makeBold(replace(word.value, word.offset, !word.gapStatus))}`;
+      } else {
+        words += ` ${replace(word.value, word.offset, !word.gapStatus)}`;
+      }
+    });
+    this.processedText = `<p>${words}</p>`;
+  }
+
+  private makeBold(word: string): string {
+    return `<strong>${word}</strong>`;
+  }
+
+  public addAlternative(word: Word): void {
+    word.alternatives.push('');
+  }
+
+  public updateAlternative(word: Word, index: number, event: Event) {
+    word.alternatives[index] = (event.target as HTMLInputElement).value;
+  }
+
+  public removeAlternative(word: Word, index: number) {
+    word.alternatives.splice(index, 1);
+  }
 }

@@ -8,14 +8,30 @@
 <!-- Middle Container -->
   <div fxFlex="80%">
     <mat-card class="text_editor__main">
-      <!-- Draggable Words  -->
-      <button 
-          mat-raised-button 
-          class="text_editor__word" 
-          (click)="setCurrentWord(word)" 
-          *ngFor="let word of words">
-        {{word.value}}
-      </button>
+      <div 
+        *ngIf="!showPreview"
+        class="ngx-dnd-container"
+        ngxDroppable="wordArea" 
+        [model]="words">
+        <!-- Draggable Words  -->
+        <ng-container *ngFor="let word of words">
+            <button 
+              #item
+              *ngIf="!word.isEditMode"
+              ngxDraggable="wordArea,deleteArea"
+              mat-raised-button 
+              [model]="word"
+              class="text_editor__word" 
+              (dblclick)="makeItBoldAndGapped(word)"
+              [ngClass]="{'text_editor__make_bold':word.boldStatus }"
+              (click)="setCurrentWord(word)">
+              {{word.value | replace:word.offset:!word.gapStatus}} {{(word.showAlternatives && word.alternatives.length > 0)?'/'+word.alternatives.join('/'):''}}
+            </button>
+        </ng-container>
+      </div>
+      <div [innerHTML]="processedText" *ngIf="showPreview">
+      </div>
+      
     </mat-card>
   </div>
 
@@ -29,8 +45,8 @@
     fxLayoutGap.xs="0"  
     fxFlex="20%">
     <!-- Item Configurations Card -->
-    <mat-card *ngIf="currentWord">
-      <mat-card-content >
+    <mat-card >
+      <mat-card-content *ngIf="currentWord" >
         <h5>Current token</h5> 
         <p>
           Token: {{currentWord && currentWord.value}}
@@ -39,36 +55,53 @@
             Gapped: {{currentWord && currentWord.value | replace:currentWord.offset}}
         </p>
         <div>
-            <mat-slide-toggle [(ngModel)]="currentWord.gapStatus" color="primary"> Toggle Gap</mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="currentWord.gapStatus" color="primary"> Make it Gapped</mat-slide-toggle>
         </div>
         <div>
-            <mat-slide-toggle matTooltip="Cannot make it special when it is gapped" color="primary">Make it special </mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="currentWord.boldStatus" matTooltip="make it bold" color="primary">Make it bold </mat-slide-toggle>
+        </div>
+        <div>
+            <mat-slide-toggle [(ngModel)]="currentWord.showAlternatives" color="primary"> Show Alternatives</mat-slide-toggle>
         </div>
         <br>
         <!-- Solutions Part -->
        <div>
+         <mat-form-field >
+             <input matInput [(ngModel)]="currentWord.value" >
+         </mat-form-field>
           <h5>
               Alternative solutions
-              <button mat-mini-fab color="primary">
-                  <mat-icon matTooltip="Add an alternative solution">add</mat-icon>
+              <button (click)="addAlternative(currentWord)" mat-mini-fab color="primary">
+                  <mat-icon  matTooltip="Add an alternative solution">add</mat-icon>
               </button>
           </h5>
           <!-- for each solution in each word -->
-          <mat-form-field class="">
-              <input matInput >
-          </mat-form-field>
-          <mat-icon matTooltip="Delete this solution">close</mat-icon>
+          <div *ngFor="let alt of currentWord.alternatives;let i = index">
+            <mat-form-field >
+                <input matInput [value]="currentWord.alternatives[i]" (change)="updateAlternative(currentWord,i,$event)" >
+            </mat-form-field>
+            <mat-icon class="text_editor__right__close" (click)="removeAlternative(currentWord,i)" matTooltip="Delete this solution">close</mat-icon>
+          </div>
+
        </div>
        <!-- Gap Part -->
        <div>
          <div>
            Change gap index
          </div>
-         <mat-slider color="primary" min="1" max="5" step="1" ></mat-slider>
+         <mat-slider  [(ngModel)]="currentWord.offset" [max]="currentWord.value.length" thumbLabel="true" color="primary" min="0" step="1" >
+        </mat-slider>
+        {{currentWord.offset}}
        </div>
 
       </mat-card-content>
+      <mat-card-content   fxLayoutAlign="center" *ngIf="!currentWord" >
+       <span class="text_editor__right__empty_word">
+         Select a Word
+       </span>
+      </mat-card-content>
     </mat-card>
+
     <mat-card>
       <mat-card-content>
         <div
@@ -77,11 +110,20 @@
           fxLayoutAlign="center"
           fxLayoutGap="10px"
           fxLayoutGap.xs="0">
-          <div fxLayoutAlign="center">
-              New Word
+          <div 
+          class="ngx-dnd-container" 
+          [copy]="true"
+          ngxDroppable>
+            <span 
+            [model]="currentWord"
+            class="ngx-dnd-item" 
+            ngxDraggable="wordArea"
+            fxLayoutAlign="center">
+                New Word
+            </span>
           </div>
-          <div fxLayoutAlign="center">
-            <button mat-fab color="warn">
+          <div  fxLayoutAlign="center">
+            <button [model]="[]" class="ngx-dnd-container"  ngxDroppable="deleteArea" mat-fab color="warn">
               <mat-icon matTooltip="Drop here to delete">delete</mat-icon>
             </button>
           </div>
@@ -117,7 +159,7 @@
               </button>
             </div> -->
             <div fxLayoutAlign="center">
-              <mat-slide-toggle  color="primary"> Check Preview</mat-slide-toggle>
+              <mat-slide-toggle (change)="processPreview()"  [(ngModel)]="showPreview" color="primary"> Check Preview</mat-slide-toggle>
             </div>
         </div>
         </mat-card-content>

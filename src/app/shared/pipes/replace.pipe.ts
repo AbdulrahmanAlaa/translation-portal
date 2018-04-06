@@ -5,8 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ReplacePipe implements PipeTransform {
 
-  transform(value: any, count?: any): any {
-    return value.slice(0, count) + (value.slice(count).replace(/./g, '_'));
+  transform(value: any, count?: any, isAllowed?: any): any {
+    return isAllowed ? value : value.slice(0, count) + (value.slice(count).replace(/./g, '_'));
   }
 
 }
