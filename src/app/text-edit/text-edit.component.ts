@@ -108,8 +108,8 @@ export class TextEditComponent implements OnInit {
             const doc = document.createElement('a');
             doc.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.processedText)),
               doc.setAttribute('download', (data.file.title + '.txt'));
-              console.log(doc)
-              doc.click();
+            console.log(doc)
+            doc.click();
             break;
         }
       }, no: 'Cancel', yes: 'Export'
@@ -187,5 +187,13 @@ export class TextEditComponent implements OnInit {
     );
     doc.save(title);
     return;
+  }
+  /** Calculate total gapes enabled for each word */
+  calculateGaps() {
+    let total = 0;
+    this.words.forEach((word: Word) => {
+      total += word.gapStatus ? word.offset : 0;
+    });
+    return total;
   }
 }

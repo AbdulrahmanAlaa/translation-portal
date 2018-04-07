@@ -142,21 +142,11 @@
                 Cancel
               </button>
             </div>
-            <!-- <div fxLayoutAlign="center">
-              <button  mat-raised-button>
-                Reformat
-              </button>
-            </div> -->
             <div fxLayoutAlign="center">
               <button (click)="openDialogExport()"  mat-raised-button>
                 Export
               </button>
             </div>
-            <!-- <div fxLayoutAlign="center">
-              <button  mat-raised-button>
-                Debug
-              </button>
-            </div> -->
             <div fxLayoutAlign="center">
               <mat-slide-toggle (change)="processPreview()"  [(ngModel)]="showPreview" color="primary"> Check Preview</mat-slide-toggle>
             </div>
@@ -166,7 +156,7 @@
     <mat-card>
       <mat-card-content>
         <p>
-          gaps: {{0}}
+          gaps: {{calculateGaps()}}
         </p>
         <p>
           total words: {{words.length}}
