@@ -48,6 +48,7 @@ export class TextEditComponent implements OnInit {
   }
 
 
+  /** * * * * * * * * PRIVATE METHODS * * * * * * * * * */
   /**
    * Split each word and make it draggable
    */
@@ -90,6 +91,7 @@ export class TextEditComponent implements OnInit {
     return;
   }
 
+  /** * * * * * * * * PUBLIC METHODS * * * * * * * * * */
   /**
    * Cancel Changes and return back home
    */
@@ -130,15 +132,17 @@ export class TextEditComponent implements OnInit {
             break;
 
           case 'Text':
+            const div = document.createElement('div');
+            div.innerHTML = this.processedText;
             const doc = document.createElement('a');
-            doc.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.processedText)),
+            doc.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(div.innerText)),
               doc.setAttribute('download', (data.file.title + '.txt'));
             doc.click();
             break;
         }
       }, no: 'Cancel', yes: 'Export'
     };
-    const dialogRef = this.dialog.open(ModalDialogComponent, { width: '', data });
+    this.dialog.open(ModalDialogComponent, { width: '', data });
   }
 
   /**
@@ -162,12 +166,14 @@ export class TextEditComponent implements OnInit {
     const replace = new ReplacePipe().transform;
     this.words.forEach((word: Word) => {
       if (word.boldStatus) {
-        words += ` ${this.makeBold(replace(word.value, word.offset, !word.gapStatus))}`;
+        words += ` ${this.makeBold(replace(word.value, word.offset, !word.gapStatus))} ${(word.showAlternatives &&
+          word.alternatives.length > 0) ? ('/ ' + word.alternatives.join(' /')) : ''}`;
       } else {
-        words += ` ${replace(word.value, word.offset, !word.gapStatus)}`;
+        words += ` ${replace(word.value, word.offset, !word.gapStatus)} ${(word.showAlternatives && word.alternatives.length > 0) ?
+          ('/ ' + word.alternatives.join(' /')) : ''} `;
       }
     });
-    this.processedText = `<p>${words}</p>`;
+    this.processedText = `<p>${words} </p>`;
   }
 
 
