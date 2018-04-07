@@ -98,11 +98,20 @@ export class TextEditComponent implements OnInit {
         selectedValue: 'Text'
       },
       title: 'Export As', action: () => {
-        // const doc = new jsPDF();
-        // const text = `${data.file.title}`;
-        this.processPDFFile(data.file.title);
-        // doc.text(20, 20, this.processedText);
-        // doc.save(text);
+        this.processPreview();
+        switch (data.options.selectedValue) {
+          case 'PDF':
+            this.processPDFFile(data.file.title);
+            break;
+
+          case 'Text':
+            const doc = document.createElement('a');
+            doc.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.processedText)),
+              doc.setAttribute('download', (data.file.title + '.txt'));
+              console.log(doc)
+              doc.click();
+            break;
+        }
       }, no: 'Cancel', yes: 'Export'
     };
     const dialogRef = this.dialog.open(ModalDialogComponent, { width: '', data });
@@ -167,8 +176,7 @@ export class TextEditComponent implements OnInit {
     word.alternatives.splice(index, 1);
   }
   private processPDFFile(title) {
-     const doc = new jsPDF();
-    this.processPreview();
+    const doc = new jsPDF();
     doc.fromHTML(
       this.processedText,
       15,

@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <p *ngIf="data.content">{{data.content}}?</p>
   <mat-form-field *ngIf="data.file" >
-    <input matInput [placeholder]="data.file.placeholder" [value]="data.file.title">
+    <input matInput [placeholder]="data.file.placeholder" [(ngModel)]="data.file.title">
   </mat-form-field>
   <mat-form-field *ngIf="data.options">
       <mat-select [placeholder]="data.options.title" [(ngModel)]="data.options.selectedValue" name="format">
