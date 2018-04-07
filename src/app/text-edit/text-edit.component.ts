@@ -39,12 +39,16 @@ export class TextEditComponent implements OnInit {
     this.newValue.value = '';
     this.newValue.showAlternatives = this.newValue.gapStatus = this.newValue.boldStatus = false;
     this.newValue.alternatives = [];
-    this.currentData.language = this.storageService.getStorage(LOCAL_STORAGE.Language);
-    this.currentData.text = this.storageService.getStorage(LOCAL_STORAGE.TEXT);
-    if (!this.currentData.language || !this.currentData.text) {
-      this.router.navigate(['/']);
+    this.words = this.storageService.getStorage(LOCAL_STORAGE.WORDS) || null;
+    if (!this.words) {
+      this.currentData.language = this.storageService.getStorage(LOCAL_STORAGE.Language);
+      this.currentData.text = this.storageService.getStorage(LOCAL_STORAGE.TEXT);
+      if (!this.currentData.language || !this.currentData.text) {
+        this.router.navigate(['/']);
+      } else {
+        this.processDate();
+      }
     }
-    this.processDate();
   }
 
 
@@ -91,6 +95,10 @@ export class TextEditComponent implements OnInit {
     return;
   }
 
+  public updateStorage() {
+    this.storageService.setStorage(LOCAL_STORAGE.WORDS, this.words);
+  }
+
   /** * * * * * * * * PUBLIC METHODS * * * * * * * * * */
   /**
    * Cancel Changes and return back home
@@ -105,6 +113,7 @@ export class TextEditComponent implements OnInit {
         // Yes Case
         this.storageService.setStorage(LOCAL_STORAGE.Language, null);
         this.storageService.setStorage(LOCAL_STORAGE.TEXT, null);
+        this.storageService.setStorage(LOCAL_STORAGE.WORDS, null);
         this.router.navigate(['/']);
       }
     });
@@ -158,6 +167,7 @@ export class TextEditComponent implements OnInit {
    */
   public makeItBoldAndGapped(word: Word) {
     word.boldStatus = word.gapStatus = true;
+    this.updateStorage();
   }
 
   /** Process data before being exported  */
@@ -185,10 +195,12 @@ export class TextEditComponent implements OnInit {
   /** updates the alternative word with each change */
   public onWordAlternativeChange(word: Word, index: number, event: Event) {
     word.alternatives[index] = (event.target as HTMLInputElement).value;
+    this.updateStorage();
   }
 
   public onWordAlternativeCloseClick(word: Word, index: number) {
     word.alternatives.splice(index, 1);
+    this.updateStorage();
   }
 
   /** Calculate total gapes enabled for each word */

@@ -54,13 +54,13 @@
             Gapped: {{currentWord && currentWord.value | replace:currentWord.offset}}
         </p>
         <div>
-            <mat-slide-toggle [(ngModel)]="currentWord.gapStatus" color="primary"> Make it Gapped</mat-slide-toggle>
+            <mat-slide-toggle (change)="updateStorage()" [(ngModel)]="currentWord.gapStatus" color="primary"> Make it Gapped</mat-slide-toggle>
         </div>
         <div>
-          <mat-slide-toggle [(ngModel)]="currentWord.boldStatus" matTooltip="make it bold" color="primary">Make it bold </mat-slide-toggle>
+          <mat-slide-toggle (change)="updateStorage()" [(ngModel)]="currentWord.boldStatus" matTooltip="make it bold" color="primary">Make it bold </mat-slide-toggle>
         </div>
         <div>
-            <mat-slide-toggle [(ngModel)]="currentWord.showAlternatives" color="primary"> Show Alternatives</mat-slide-toggle>
+            <mat-slide-toggle (change)="updateStorage()" [(ngModel)]="currentWord.showAlternatives" color="primary"> Show Alternatives</mat-slide-toggle>
         </div>
         <br>
         <!-- Solutions Part -->
