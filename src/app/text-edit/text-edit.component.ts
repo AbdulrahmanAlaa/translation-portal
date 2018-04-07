@@ -51,7 +51,7 @@ export class TextEditComponent implements OnInit {
   /**
    * Split each word and make it draggable
    */
-  processDate(): any {
+  private processDate(): any {
     let singleWord: Word = null;
 
     // Holds array of words
@@ -68,6 +68,27 @@ export class TextEditComponent implements OnInit {
     });
   }
 
+  private makeBold(word: string): string {
+    return `<strong>${word}</strong>`;
+  }
+
+  /**
+   * Export html to PDF and open download dialog
+   * @param title File name to be saved
+   */
+  private processPDFFile(title) {
+    const doc = new jsPDF();
+    doc.fromHTML(
+      this.processedText,
+      15,
+      15,
+      {
+        'width': 180, 'elementHandlers': (a) => console.log(a)
+      }
+    );
+    doc.save(title);
+    return;
+  }
 
   /**
    * Cancel Changes and return back home
@@ -86,6 +107,10 @@ export class TextEditComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Ask user to Export html to txt/pdf
+   */
   public openDialogExport(): void {
     const data = {
       file: { placeholder: 'Name', title: '' },
@@ -108,46 +133,31 @@ export class TextEditComponent implements OnInit {
             const doc = document.createElement('a');
             doc.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.processedText)),
               doc.setAttribute('download', (data.file.title + '.txt'));
-            console.log(doc)
             doc.click();
             break;
         }
       }, no: 'Cancel', yes: 'Export'
     };
     const dialogRef = this.dialog.open(ModalDialogComponent, { width: '', data });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'Yes') {
-        // Yes Case
-        this.storageService.setStorage(LOCAL_STORAGE.Language, null);
-        this.storageService.setStorage(LOCAL_STORAGE.TEXT, null);
-        this.router.navigate(['/']);
-      }
-    });
   }
 
-  // Set Current Word to be Configurable
-  setCurrentWord(word: Word) {
+  /**
+   * Set Current Clicked Word to be Configurable
+   */
+  public onWordClick(word: Word) {
     this.currentWord = word;
   }
 
   /**
-   * Add Gap to word
-   * @param word {Word}
-   */
-  createGap(word: Word) {
-
-  }
-
-  /**
-   *  Edit The Word
+   *  Edit The Word to be Bold and Gaped
    * @param word
    */
-  makeItBoldAndGapped(word: Word) {
+  public makeItBoldAndGapped(word: Word) {
     word.boldStatus = word.gapStatus = true;
   }
 
   /** Process data before being exported  */
-  processPreview() {
+  public processPreview() {
     let words = '';
     const replace = new ReplacePipe().transform;
     this.words.forEach((word: Word) => {
@@ -160,36 +170,23 @@ export class TextEditComponent implements OnInit {
     this.processedText = `<p>${words}</p>`;
   }
 
-  private makeBold(word: string): string {
-    return `<strong>${word}</strong>`;
-  }
 
+  /** adding alternative for current selected word */
   public addAlternative(word: Word): void {
     word.alternatives.push('');
   }
 
-  public updateAlternative(word: Word, index: number, event: Event) {
+  /** updates the alternative word with each change */
+  public onWordAlternativeChange(word: Word, index: number, event: Event) {
     word.alternatives[index] = (event.target as HTMLInputElement).value;
   }
 
-  public removeAlternative(word: Word, index: number) {
+  public onWordAlternativeCloseClick(word: Word, index: number) {
     word.alternatives.splice(index, 1);
   }
-  private processPDFFile(title) {
-    const doc = new jsPDF();
-    doc.fromHTML(
-      this.processedText,
-      15,
-      15,
-      {
-        'width': 180, 'elementHandlers': (a) => console.log(a)
-      }
-    );
-    doc.save(title);
-    return;
-  }
+
   /** Calculate total gapes enabled for each word */
-  calculateGaps() {
+  public calculateGaps() {
     let total = 0;
     this.words.forEach((word: Word) => {
       total += word.gapStatus ? word.offset : 0;

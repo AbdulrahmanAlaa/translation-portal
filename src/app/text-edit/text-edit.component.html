@@ -23,7 +23,7 @@
               class="text_editor__word" 
               (dblclick)="makeItBoldAndGapped(word)"
               [ngClass]="{'text_editor__make_bold':word.boldStatus }"
-              (click)="setCurrentWord(word)">
+              (click)="onWordClick(word)">
               {{word.value | replace:word.offset:!word.gapStatus}} {{(word.showAlternatives && word.alternatives.length > 0)?'/ '+word.alternatives.join('/ '):''}}
             </button>
         </ng-container>
@@ -77,9 +77,9 @@
           <!-- for each solution in each word -->
           <div *ngFor="let alt of currentWord.alternatives;let i = index">
             <mat-form-field >
-                <input matInput [value]="currentWord.alternatives[i]" (change)="updateAlternative(currentWord,i,$event)" >
+                <input matInput [value]="currentWord.alternatives[i]" (change)="onWordAlternativeChange(currentWord,i,$event)" >
             </mat-form-field>
-            <mat-icon class="text_editor__right__close" (click)="removeAlternative(currentWord,i)" matTooltip="Delete this solution">close</mat-icon>
+            <mat-icon class="text_editor__right__close" (click)="onWordAlternativeCloseClick(currentWord,i)" matTooltip="Delete this solution">close</mat-icon>
           </div>
 
        </div>
