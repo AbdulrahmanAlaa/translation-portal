@@ -11,6 +11,11 @@
         min-height: 270px;
     }
     &__right {
+        &__new_word{
+            background-color: initial;
+            border: 1px solid rgba(0,0,0,.87) ;
+        }
+
         &__close{
             cursor: pointer;
         }

@@ -16,4 +16,9 @@ export class ModalDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+  onYesHandler() {
+    if (this.data.action) {
+      this.data.action();
+    }
+  }
 }

@@ -17,7 +17,6 @@
         <ng-container *ngFor="let word of words">
             <button 
               #item
-              *ngIf="!word.isEditMode"
               ngxDraggable="wordArea,deleteArea"
               mat-raised-button 
               [model]="word"
@@ -25,7 +24,7 @@
               (dblclick)="makeItBoldAndGapped(word)"
               [ngClass]="{'text_editor__make_bold':word.boldStatus }"
               (click)="setCurrentWord(word)">
-              {{word.value | replace:word.offset:!word.gapStatus}} {{(word.showAlternatives && word.alternatives.length > 0)?'/'+word.alternatives.join('/'):''}}
+              {{word.value | replace:word.offset:!word.gapStatus}} {{(word.showAlternatives && word.alternatives.length > 0)?'/ '+word.alternatives.join('/ '):''}}
             </button>
         </ng-container>
       </div>
@@ -115,8 +114,8 @@
           [copy]="true"
           ngxDroppable>
             <span 
-            [model]="currentWord"
-            class="ngx-dnd-item" 
+            [model]="newValue"
+            class="text_editor__right__new_word ngx-dnd-item" 
             ngxDraggable="wordArea"
             fxLayoutAlign="center">
                 New Word
@@ -149,7 +148,7 @@
               </button>
             </div> -->
             <div fxLayoutAlign="center">
-              <button  mat-raised-button>
+              <button (click)="openDialogExport()"  mat-raised-button>
                 Export
               </button>
             </div>

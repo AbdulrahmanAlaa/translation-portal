@@ -6,13 +6,14 @@ import { StorageService } from './../storage.service';
 import { LOCAL_STORAGE } from '../../shared/utilities/defines';
 import { Word } from '../shared/models/word';
 import { ReplacePipe } from '../shared/pipes/replace.pipe';
-
+import * as jsPDF from 'jspdf';
 @Component({
   selector: 'tp-text-edit',
   templateUrl: './text-edit.component.html',
   styleUrls: ['./text-edit.component.scss']
 })
 export class TextEditComponent implements OnInit {
+
   /** holds user selected language and text */
   currentData: { language, text } = { language: '', text: '' };
 
@@ -28,13 +29,16 @@ export class TextEditComponent implements OnInit {
   /** holds selected current word */
   public currentWord: Word = null;
 
-  /** holds the new value in the edit mode */
-  public newValue;
+  /** holds the new value to add new word  */
+  public newValue = new Object() as Word;
 
   // Life Cycle Hooks
   constructor(public dialog: MatDialog, private router: Router, private storageService: StorageService) { }
 
   ngOnInit(): void {
+    this.newValue.value = '';
+    this.newValue.showAlternatives = this.newValue.gapStatus = this.newValue.boldStatus = false;
+    this.newValue.alternatives = [];
     this.currentData.language = this.storageService.getStorage(LOCAL_STORAGE.Language);
     this.currentData.text = this.storageService.getStorage(LOCAL_STORAGE.TEXT);
     if (!this.currentData.language || !this.currentData.text) {
@@ -53,16 +57,13 @@ export class TextEditComponent implements OnInit {
     // Holds array of words
     const words = this.currentData.text.split(' ');
     // Holds array of objects needed to save each word functionality
-    this.words = words.map((word, index) => {
+    this.words = words.map((word: string, index) => {
       singleWord = new Object() as Word;
       singleWord.id = index;
       singleWord.value = word;
       singleWord.alternatives = [];
-      singleWord.gapStatus = false;
-      singleWord.showAlternatives = false;
-      singleWord.boldStatus = false;
-      singleWord.offset = 3;
-      singleWord.isEditMode = false;
+      singleWord.showAlternatives = singleWord.gapStatus = singleWord.boldStatus = false;
+      singleWord.offset = ((word.length <= 3) ? word.length : 3);
       return singleWord;
     });
   }
@@ -71,11 +72,40 @@ export class TextEditComponent implements OnInit {
   /**
    * Cancel Changes and return back home
    */
-  openDialogCancel(): void {
+  public openDialogCancel(): void {
     const dialogRef = this.dialog.open(ModalDialogComponent, {
       width: '',
       data: { title: 'Go Back', content: 'All data will be lost, do you want to continue', no: 'No', yes: 'Yes' }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'Yes') {
+        // Yes Case
+        this.storageService.setStorage(LOCAL_STORAGE.Language, null);
+        this.storageService.setStorage(LOCAL_STORAGE.TEXT, null);
+        this.router.navigate(['/']);
+      }
+    });
+  }
+  public openDialogExport(): void {
+    const data = {
+      file: { placeholder: 'Name', title: '' },
+      options: {
+        title: 'Format',
+        values: [
+          'PDF',
+          'Text'
+        ],
+        selectedValue: 'Text'
+      },
+      title: 'Export As', action: () => {
+        // const doc = new jsPDF();
+        // const text = `${data.file.title}`;
+        this.processPDFFile(data.file.title);
+        // doc.text(20, 20, this.processedText);
+        // doc.save(text);
+      }, no: 'Cancel', yes: 'Export'
+    };
+    const dialogRef = this.dialog.open(ModalDialogComponent, { width: '', data });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'Yes') {
         // Yes Case
@@ -109,7 +139,6 @@ export class TextEditComponent implements OnInit {
 
   /** Process data before being exported  */
   processPreview() {
-    console.log('called', this.words);
     let words = '';
     const replace = new ReplacePipe().transform;
     this.words.forEach((word: Word) => {
@@ -136,5 +165,19 @@ export class TextEditComponent implements OnInit {
 
   public removeAlternative(word: Word, index: number) {
     word.alternatives.splice(index, 1);
+  }
+  private processPDFFile(title) {
+     const doc = new jsPDF();
+    this.processPreview();
+    doc.fromHTML(
+      this.processedText,
+      15,
+      15,
+      {
+        'width': 180, 'elementHandlers': (a) => console.log(a)
+      }
+    );
+    doc.save(title);
+    return;
   }
 }

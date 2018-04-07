@@ -6,5 +6,4 @@ export interface Word {
     gapStatus: boolean;
     offset: number;
     value: string;
-    isEditMode: boolean;
 }
