@@ -205,10 +205,15 @@ export class TextEditComponent implements OnInit {
 
   /** Calculate total gapes enabled for each word */
   public calculateGaps() {
-    let total = 0;
-    this.words.forEach((word: Word) => {
-      total += word.gapStatus ? word.offset : 0;
-    });
-    return total;
+    return this.words.filter((word : Word) =>  Boolean(word.gapStatus)).length;
+  }
+
+  /**
+   * delete Current Word
+   */
+  public delete() {
+    this.words.splice(this.words.indexOf(this.currentWord), 1);
+    this.currentWord = null;
+    this.updateStorage()
   }
 }

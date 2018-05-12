@@ -1,5 +1,5 @@
  <!-- Report Card -->
-  <div class="report_card" fxLayoutAlign="start" fxLayoutGap="25px">
+  <div *ngIf="this.words" class="report_card" fxLayoutAlign="start" fxLayoutGap="25px">
       <div class="report_card__preview" >
         <mat-slide-toggle (change)="processPreview()"  [(ngModel)]="showPreview" color="primary"> Check Preview</mat-slide-toggle>
       </div>
@@ -39,6 +39,8 @@
               (click)="onWordClick(word)">
               {{word.value | replace:word.offset:!word.gapStatus}} {{(word.showAlternatives && word.alternatives.length > 0)?'/ '+word.alternatives.join('/ '):''}}
           </label>
+          <!-- <mat-icon *ngIf="word === currentWord" matTooltip="Drop here to delete">delete</mat-icon> -->
+          
         </ng-container>
       </div>
       <div [innerHTML]="processedText" *ngIf="showPreview">
@@ -59,7 +61,13 @@
     <!-- Item Configurations Card -->
     <mat-card >
       <mat-card-content *ngIf="currentWord" >
-        <h5>Current token</h5> 
+      <div class="config_card" fxLayoutAlign="start">
+        <h5>Current token
+        </h5>
+        <div>
+          <mat-icon color="warn" (click)="delete()" matTooltip="Click here to delete">delete</mat-icon>
+        </div> 
+      </div>
         <p>
           Token: {{currentWord && currentWord.value}}
         </p>
@@ -114,7 +122,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <!-- <mat-card>
       <mat-card-content>
         <div
           fxLayout="column"
@@ -141,7 +149,7 @@
           </div>
         </div>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
     <mat-card>
       <mat-card-content>
         <div
