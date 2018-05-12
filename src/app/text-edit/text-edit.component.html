@@ -1,3 +1,17 @@
+ <!-- Report Card -->
+  <div class="report_card" fxLayoutAlign="start" fxLayoutGap="25px">
+      <div class="report_card__preview" >
+        <mat-slide-toggle (change)="processPreview()"  [(ngModel)]="showPreview" color="primary"> Check Preview</mat-slide-toggle>
+      </div>
+      <p>
+        gaps: {{calculateGaps()}}
+      </p>
+      <p>
+        total words: {{words.length}}
+      </p>
+  </div>
+
+
 <div  class="text_editor"
       fxLayout
       fxLayout.xs="column"
@@ -15,17 +29,16 @@
         [model]="words">
         <!-- Draggable Words  -->
         <ng-container *ngFor="let word of words">
-            <button 
+            <label 
+              [ngClass]="{'highlightme': word === currentWord,'text_editor__make_bold':word.boldStatus }"
               #item
               ngxDraggable="wordArea,deleteArea"
-              mat-raised-button 
               [model]="word"
               class="text_editor__word" 
               (dblclick)="makeItBoldAndGapped(word)"
-              [ngClass]="{'text_editor__make_bold':word.boldStatus }"
               (click)="onWordClick(word)">
               {{word.value | replace:word.offset:!word.gapStatus}} {{(word.showAlternatives && word.alternatives.length > 0)?'/ '+word.alternatives.join('/ '):''}}
-            </button>
+          </label>
         </ng-container>
       </div>
       <div [innerHTML]="processedText" *ngIf="showPreview">
@@ -147,21 +160,11 @@
                 Export
               </button>
             </div>
-            <div fxLayoutAlign="center">
-              <mat-slide-toggle (change)="processPreview()"  [(ngModel)]="showPreview" color="primary"> Check Preview</mat-slide-toggle>
-            </div>
+           
         </div>
         </mat-card-content>
     </mat-card>
-    <mat-card>
-      <mat-card-content>
-        <p>
-          gaps: {{calculateGaps()}}
-        </p>
-        <p>
-          total words: {{words.length}}
-        </p>
-      </mat-card-content>
-    </mat-card>
+
+   
   </div>
 </div>
