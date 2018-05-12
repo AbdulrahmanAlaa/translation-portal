@@ -6,7 +6,13 @@
         }
     }
     &__group2 {
+        mat-icon{
+          margin-top:10px;  
+        }
         margin: 10px 10px;
+        &__btn_text{
+            margin: auto;
+        }   
         &__file {
             width: 0.1px;
             height: 0.1px;
