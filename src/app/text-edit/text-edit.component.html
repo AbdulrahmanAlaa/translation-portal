@@ -39,8 +39,21 @@
               (click)="onWordClick(word)">
               {{word.value | replace:word.offset:!word.gapStatus}} {{(word.showAlternatives && word.alternatives.length > 0)?'/ '+word.alternatives.join('/ '):''}}
           </label>
-          <!-- <mat-icon *ngIf="word === currentWord" matTooltip="Drop here to delete">delete</mat-icon> -->
-          
+          <mat-form-field *ngIf="word === currentWord && isEditMode" >
+            <input matInput  type="text"  [(ngModel)]="word.value">
+          </mat-form-field>
+          <button (click)="delete()" *ngIf="word === currentWord"  mat-mini-fab color="warn">
+              <mat-icon matTooltip="Remove Word">delete</mat-icon>
+          </button>
+          <button (click)="addNewWord()" *ngIf="word === currentWord"  mat-mini-fab  color="primary">
+              <mat-icon matTooltip="Add new word next">add</mat-icon>
+          </button>
+          <button (click)="isEditMode=!isEditMode" *ngIf="word === currentWord && !isEditMode"  mat-mini-fab  color="primary">
+              <mat-icon matTooltip="Edit Word">edit</mat-icon>
+          </button>
+          <button (click)="isEditMode=!isEditMode" *ngIf="word === currentWord && isEditMode"  mat-mini-fab  color="primary">
+              <mat-icon matTooltip="Close Edit Mode">close</mat-icon>
+          </button>
         </ng-container>
       </div>
       <div [innerHTML]="processedText" *ngIf="showPreview">
@@ -100,7 +113,10 @@
             <mat-form-field >
                 <input matInput [value]="currentWord.alternatives[i]" (change)="onWordAlternativeChange(currentWord,i,$event)" >
             </mat-form-field>
-            <mat-icon class="text_editor__right__close" (click)="onWordAlternativeCloseClick(currentWord,i)" matTooltip="Delete this solution">close</mat-icon>
+            <mat-icon 
+            class="text_editor__right__close" 
+            (click)="onWordAlternativeCloseClick(currentWord,i)" 
+            matTooltip="Delete this solution">close</mat-icon>
           </div>
 
        </div>

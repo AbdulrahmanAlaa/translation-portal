@@ -20,6 +20,8 @@ export class TextEditComponent implements OnInit {
   /** holds all words */
   public words = [];
 
+  /** holds single word mode that indicate edit or view mode */
+  public isEditMode= false;
   /** display text after formatting and before exporting */
   public showPreview = false;
 
@@ -205,7 +207,7 @@ export class TextEditComponent implements OnInit {
 
   /** Calculate total gapes enabled for each word */
   public calculateGaps() {
-    return this.words.filter((word : Word) =>  Boolean(word.gapStatus)).length;
+    return this.words.filter((word: Word) => Boolean(word.gapStatus)).length;
   }
 
   /**
@@ -215,5 +217,20 @@ export class TextEditComponent implements OnInit {
     this.words.splice(this.words.indexOf(this.currentWord), 1);
     this.currentWord = null;
     this.updateStorage()
+  }
+
+  public addNewWord() {
+   let result= this.words.indexOf(this.currentWord);
+    this.words.splice(++result, 0, ({
+      offset:0,
+      showAlternatives:false,
+      value:'Value',
+      alternatives: [], 
+      boldStatus: false,
+       id: Math.random() * 15, 
+      gapStatus: false
+    } as Word));
+    this.currentWord = this.words[result];
+    this.isEditMode = true;
   }
 }
