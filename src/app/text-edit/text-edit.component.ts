@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,ViewChild, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 import { Router } from '@angular/router';
@@ -20,6 +20,8 @@ export class TextEditComponent implements OnInit {
   /** holds all words */
   public words = [];
 
+  /** holds single word mode that indicate edit or view mode */
+  public isEditMode= false;
   /** display text after formatting and before exporting */
   public showPreview = false;
 
@@ -31,6 +33,8 @@ export class TextEditComponent implements OnInit {
 
   /** holds the new value to add new word  */
   public newValue = new Object() as Word;
+
+  @ViewChild('input_currentValue') input_currentValue
 
   // Life Cycle Hooks
   constructor(public dialog: MatDialog, private router: Router, private storageService: StorageService) { }
@@ -166,7 +170,8 @@ export class TextEditComponent implements OnInit {
    * @param word
    */
   public makeItBoldAndGapped(word: Word) {
-    word.boldStatus = word.gapStatus = true;
+    word.boldStatus = !word.boldStatus;
+    word.gapStatus = !word.gapStatus;
     this.updateStorage();
   }
 
@@ -205,10 +210,36 @@ export class TextEditComponent implements OnInit {
 
   /** Calculate total gapes enabled for each word */
   public calculateGaps() {
-    let total = 0;
-    this.words.forEach((word: Word) => {
-      total += word.gapStatus ? word.offset : 0;
+    return this.words.filter((word: Word) => Boolean(word.gapStatus)).length;
+  }
+
+
+  /**
+   * delete Current Word
+   */
+  public delete() {
+    this.words.splice(this.words.indexOf(this.currentWord), 1);
+    this.currentWord = null;
+    this.updateStorage()
+  }
+
+  public addNewWord(input:any) {
+
+    let result= this.words.length-1;
+    this.words.splice(++result, 0, ({
+      offset:3,
+      showAlternatives:false,
+      value:'new word',
+      alternatives: [],
+      boldStatus: false,
+       id: Math.random() * 15,
+      gapStatus: false
+    } as Word));
+    this.currentWord = this.words[result];
+    setTimeout(()=>{
+      this.input_currentValue.nativeElement.select();
+        console.log(this.input_currentValue.nativeElement.focus());
     });
-    return total;
+    //this.isEditMode = true;
   }
 }

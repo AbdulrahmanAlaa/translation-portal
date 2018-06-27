@@ -1,3 +1,6 @@
+.config_card{
+    align-items: center !important;
+}
 .report_card{
     &__preview{
         margin-top: auto;
@@ -11,7 +14,7 @@
     &__word {
         margin: 10px;
         padding: 10px;
-        color: rgba(0, 0, 0, .87); 
+        color: rgba(0, 0, 0, .87);
         display: inline-block;
     }
     &__main {
@@ -35,5 +38,9 @@
         }
     }
 }
+.margin-left-1{
+  margin-left: 50px;
+}
 
 .highlightme { background-color:#FFFF00; }
+.delete{cursor: pointer; padding-left: 26px;}
